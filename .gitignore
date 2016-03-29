@@ -1,3 +1,7 @@
+.DS_Store
+/build
+/captures
+
 # Built application files
 *.apk
 *.ap_
@@ -24,6 +28,8 @@ proguard/
 
 # Log Files
 *.log
+*.idea
+*.iml
 
 # Android Studio Navigation editor temp files
 .navigation/
