@@ -13,8 +13,8 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val intent = Intent(this, MainActivity::class.java)
-        //startActivity(intent)
+        startActivity(intent)
 
-        //finish()
+        finish()
     }
 }

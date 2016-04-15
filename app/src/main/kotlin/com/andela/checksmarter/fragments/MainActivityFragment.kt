@@ -1,4 +1,4 @@
-package com.andela.checksmarter.activities
+package com.andela.checksmarter.fragments
 
 import android.support.v4.app.Fragment
 import android.os.Bundle
