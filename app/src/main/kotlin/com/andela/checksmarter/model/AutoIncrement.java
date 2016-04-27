@@ -15,6 +15,7 @@ public class AutoIncrement {
     public AutoIncrement initialize(Class<? extends RealmObject> clazz) {
         Number currentMax = realm.where(clazz).max("id");
         long nextId = 0;
+
         if (currentMax != null) {
             nextId = currentMax.longValue() + 1;
         }
