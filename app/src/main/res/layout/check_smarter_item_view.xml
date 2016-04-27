@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.andela.checksmarter.views.CheckSmarterItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5sp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/icons"
+        android:elevation="3dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/checkTotal"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/circle"
+                android:gravity="center"
+                android:text="15"
+                android:textColor="@color/icons"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/checkSmarterOptions"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:src="@mipmap/ic_options_dark" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/checkImageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:src="@drawable/check" />
+
+            <TextView
+                android:id="@+id/checkTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/checkImageView"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingBottom="10dp"
+                android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingStart="5dp"
+                android:paddingTop="5dp"
+                android:text="simple checklist"
+                android:textAllCaps="true"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/checkTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearLayout"
+                android:layout_marginTop="60sp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:drawableLeft="@drawable/time"
+                android:drawableStart="@drawable/time"
+                android:drawablePadding="10sp"
+                android:gravity="center|end"
+                android:text="2 minutes ago"
+                android:textColor="@color/divider"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/checkAlarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearLayout"
+                android:layout_marginTop="60sp"
+                android:drawableLeft="@drawable/alarm"
+                android:drawableStart="@drawable/alarm"
+                android:drawablePadding="10sp"
+                android:gravity="center|start"
+                android:text="6:23 am"
+                android:textAllCaps="true"
+                android:textColor="@color/divider"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</com.andela.checksmarter.views.CheckSmarterItemView>
