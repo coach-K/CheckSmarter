@@ -1,0 +1,17 @@
+<com.andela.checksmarter.views.CheckSmarterTaskView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/csDetail"
+    android:orientation="vertical"
+    tools:context=".fragments.DetailActivityFragment"
+    tools:showIn="@layout/activity_detail">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/checkSmarterTaskView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="78dp"
+        android:padding="@dimen/activity_horizontal_margin" />
+
+</com.andela.checksmarter.views.CheckSmarterTaskView>
