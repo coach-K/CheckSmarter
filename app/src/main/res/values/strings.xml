@@ -1,4 +1,13 @@
 <resources>
-    <string name="app_name">CheckSmarter</string>
+    <string name="app_name">Check Smarter</string>
     <string name="action_settings">Settings</string>
+    <string name="speak">Speak</string>
+    <string name="no_intent_handler">
+    There are no applications available to handle this action.
+  </string>
+    <string name="edit">Edit</string>
+    <string name="set_reminder">Set Reminder</string>
+    <string name="enter_new_task">Enter new task</string>
+    <string name="enter_title">Enter title</string>
+    <string name="title_activity_review">ReviewActivity</string>
 </resources>
