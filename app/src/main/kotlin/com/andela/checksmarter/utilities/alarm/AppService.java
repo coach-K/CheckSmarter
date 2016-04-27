@@ -21,7 +21,7 @@ public class AppService extends WakefulIntentService {
 
     @Override
     protected void doWakefulWork(Intent intent) {
-        Log.i("AppService", "I'm awake! I'm awake! (yawn) - Date: " + new Date().toString());
+        Log.i("AppService", "I'm awake! (yawn) - Date: " + new Date().toString());
         Context context = getApplicationContext();
 
         NotificationManager notificationManager = (NotificationManager)
