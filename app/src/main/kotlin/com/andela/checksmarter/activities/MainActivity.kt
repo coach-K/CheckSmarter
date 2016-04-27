@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
 
         newCheckSmarter.setOnClickListener {
             getFragment().createNewCheckSmarter()
-            Log.d("HELLO", "CREATE}")
         }
     }
 

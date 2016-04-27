@@ -28,6 +28,5 @@ class MainActivityFragment : Fragment() {
 
     fun createNewCheckSmarter() {
         checkSmarterFragmentInnerView.createNewCheckSmarter()
-        Log.d("HELLO", "CREATE}")
     }
 }
