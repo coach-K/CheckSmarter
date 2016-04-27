@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.andela.checksmarter">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:name=".activities.CheckSmarterApplication"
         android:allowBackup="true"
@@ -31,6 +34,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".utilities.alarm.OnBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.common.wakeup"
+                android:resource="@xml/wakeup" />
+        </receiver>
+
+        <receiver android:name=".utilities.alarm.OnAlarmReceiver"/>
+
+        <service android:name=".utilities.alarm.AppService"/>
     </application>
 
 </manifest>
