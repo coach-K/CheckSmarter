@@ -31,15 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.ReviewActivity"
-            android:label="@string/title_activity_review"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.andela.checksmarter.activities.MainActivity" />
-        </activity>
     </application>
 
 </manifest>
