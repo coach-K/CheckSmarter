@@ -29,7 +29,7 @@ public class AlarmActivityFragment extends DialogFragment {
     public AlarmActivityFragment() {
         mDateFormatter = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
         mTimeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
-        mTimeFormatter.setTimeZone(TimeZone.getTimeZone("GMT+0"));
+        mTimeFormatter.setTimeZone(TimeZone.getTimeZone("GMT+1"));
     }
 
     SublimeListenerAdapter mListener = new SublimeListenerAdapter() {
