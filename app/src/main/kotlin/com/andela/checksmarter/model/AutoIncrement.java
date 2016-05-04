@@ -1,5 +1,7 @@
 package com.andela.checksmarter.model;
 
+import com.andela.checksmarter.utilities.alarm.ReminderManager;
+
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.realm.Realm;
@@ -13,6 +15,8 @@ public class AutoIncrement {
     AtomicLong primaryKeyValue;
 
     public AutoIncrement initialize(Class<? extends RealmObject> clazz) {
+
+
         Number currentMax = realm.where(clazz).max("id");
         long nextId = 0;
 
