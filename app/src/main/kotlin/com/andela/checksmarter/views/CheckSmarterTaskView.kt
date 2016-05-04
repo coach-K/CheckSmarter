@@ -4,11 +4,13 @@ import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.AttributeSet
+import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.andela.checksmarter.adapters.CheckSmarterTaskAdapter
 import com.andela.checksmarter.model.*
 import com.andela.checksmarter.utilities.*
+import com.andela.checksmarter.utilities.databaseCollection.DBCollection
 import io.realm.Realm
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.fragment_detail.view.*
@@ -24,51 +26,17 @@ import kotlin.properties.Delegates
 /**
  * Created by CodeKenn on 20/04/16.
  */
-class CheckSmarterTaskView(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs), CheckSmarterTaskAdapter.CheckSmarterTaskClickListener,
-        ItemTouchHelperCallback {
+class CheckSmarterTaskView(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs), CheckSmarterTaskAdapter.CheckSmarterTaskClickListener {
     val CHECK_SMARTER = "checksmarter"
-    private val checkSmarterTaskAdapter = CheckSmarterTaskAdapter(this)
-    private val subscriptions = CompositeSubscription()
+    val checkSmarterTaskAdapter = CheckSmarterTaskAdapter(this)
+    val subscriptions = CompositeSubscription()
     var currentCheckSmarter: CheckSmarterJava? = null
     var publishSubject: PublishSubject<CheckSmarterTaskJava> by Delegates.notNull()
-    var autoInc = 0
-    private val realm = Realm.getDefaultInstance()
-
-    override fun onCheckSmarterTaskClick(checkSmarterTask: CheckSmarterTaskJava) {
-        Toast.makeText(context, "ID: ${checkSmarterTask.id}", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onCheckSmarterTaskLongClick(checkSmarterTask: CheckSmarterTaskJava) {
-        Toast.makeText(context, "LONG CLICK ID: ${checkSmarterTask.id}", Toast.LENGTH_SHORT).show()
-        currentCheckSmarter?.tasks?.remove(checkSmarterTask)
-        //Toast.makeText(context, "POSITION: ${checkSmarterTask.id}", Toast.LENGTH_SHORT).show()
-        checkSmarterTaskAdapter.notifyDataSetChanged()
-    }
-
-    private fun setCheckSmarter() {
-        var checkSmarter: CheckSmarterDup? = Intents().getExtra(context, CHECK_SMARTER)
-        if (checkSmarter != null) {
-            this.currentCheckSmarter = Exchange().getRealmCheckSmarter(checkSmarter)
-        } else {
-            autoInc = getNextInt()
-            this.currentCheckSmarter = CheckSmarterJava()
-            this.currentCheckSmarter?.id = autoInc
-        }
-    }
+    val dbCollection = DBCollection()
 
     private fun initializeComponents() {
         checkSmarterTaskView.layoutManager = CheckSmarterLinearLayoutManager(context)
         checkSmarterTaskView.adapter = checkSmarterTaskAdapter
-
-        val itemTouchHelperCallback = SimpleItemTouchHelper(this)
-        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
-        itemTouchHelper.attachToRecyclerView(checkSmarterTaskView)
-    }
-
-    override fun onItemSwipedOffScreen(position: Int) {
-        currentCheckSmarter?.tasks?.removeAt(position)
-        Toast.makeText(context, "POSITION: ${position}", Toast.LENGTH_SHORT).show()
-        checkSmarterTaskAdapter.notifyDataSetChanged()
     }
 
     override fun onFinishInflate() {
@@ -91,20 +59,7 @@ class CheckSmarterTaskView(context: Context?, attrs: AttributeSet?) : LinearLayo
         subscriptions.add(result
                 .subscribe(checkSmarterTaskAdapter))
 
-        post { publishSubject.onNext(CheckSmarterTaskJava(12)) }
-    }
-
-    fun postCheckSmarterTask(title: String) {
-        realm.beginTransaction()
-
-        var checkSmarterTask = realm.createObject(CheckSmarterTaskJava::class.java)
-        checkSmarterTask.id = getNextTaskInt()
-        checkSmarterTask.title = title
-        currentCheckSmarter?.tasks?.add(checkSmarterTask)
-
-        realm.commitTransaction()
-
-        checkSmarterTaskAdapter.notifyItemInserted(0)
+        post { publishSubject.onNext(CheckSmarterTaskJava(0)) }
     }
 
     override fun onDetachedFromWindow() {
@@ -114,24 +69,41 @@ class CheckSmarterTaskView(context: Context?, attrs: AttributeSet?) : LinearLayo
         updateChanges()
     }
 
+    override fun onCheckSmarterTaskClick(checkSmarterTask: CheckSmarterTaskJava) {
+        Log.d("TASK", checkSmarterTask.id.toString())
+    }
+
+    override fun onCheckSmarterTaskLongClick(checkSmarterTask: CheckSmarterTaskJava) {
+        currentCheckSmarter?.tasks?.remove(checkSmarterTask)
+        checkSmarterTaskAdapter.notifyDataSetChanged()
+    }
+
+    private fun setCheckSmarter() {
+        var checkSmarter: CheckSmarterDup? = Intents().getExtra(context, CHECK_SMARTER)
+        if (checkSmarter != null) {
+            this.currentCheckSmarter = Exchange().getRealmCheckSmarter(checkSmarter)
+        } else {
+            this.currentCheckSmarter = CheckSmarterJava()
+            this.currentCheckSmarter?.id = dbCollection.getNextInt(CheckSmarterJava::class.java)
+        }
+    }
+
     private val checkSmarterTaskSearch = Func1<CheckSmarterTaskJava, Observable<RealmList<CheckSmarterTaskJava>>> { checkSmarterTask ->
         Observable.just(currentCheckSmarter?.tasks!!).subscribeOn(Schedulers.io())
     }
 
-    private fun updateChanges() {
-        if (this.currentCheckSmarter != null) {
-            realm.beginTransaction()
-            realm.copyToRealmOrUpdate(currentCheckSmarter)
-            realm.commitTransaction()
-            realm.close()
+    fun postCheckSmarterTask(title: String) {
+        dbCollection.updateObject {
+            var checkSmarterTask = CheckSmarterTaskJava()
+            checkSmarterTask.id = dbCollection.getNextInt(CheckSmarterTaskJava::class.java)
+            checkSmarterTask.title = title
+            currentCheckSmarter?.tasks?.add(checkSmarterTask)
         }
+
+        checkSmarterTaskAdapter.notifyItemInserted(0)
     }
 
-    fun getNextInt(): Int {
-        return AutoIncrement().initialize(CheckSmarterJava::class.java).nextId.toInt()
-    }
-
-    fun getNextTaskInt(): Int {
-        return AutoIncrement().initialize(CheckSmarterTaskJava::class.java).nextId.toInt()
+    private fun updateChanges() {
+        dbCollection.createOrUpdate(this.currentCheckSmarter!!)
     }
 }

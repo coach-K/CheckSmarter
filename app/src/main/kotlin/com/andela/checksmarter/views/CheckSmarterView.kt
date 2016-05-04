@@ -12,6 +12,8 @@ import com.andela.checksmarter.adapters.CheckSmarterAdapter
 import com.andela.checksmarter.model.CheckSmarterJava
 import com.andela.checksmarter.model.CheckSmarterTaskJava
 import com.andela.checksmarter.utilities.Exchange
+import com.andela.checksmarter.utilities.MsgBox
+import com.andela.checksmarter.utilities.databaseCollection.DBCollection
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmResults
@@ -30,8 +32,7 @@ class CheckSmarterView(context: Context?, attrs: AttributeSet?) : LinearLayout(c
     val CHECK_SMARTER = "checksmarter"
     private val checkSmarterAdapter = CheckSmarterAdapter(this)
     private val subscriptions = CompositeSubscription()
-
-    private var realm: Realm by Delegates.notNull()
+    private val dbCollection = DBCollection()
 
     override fun onCheckSmarterClick(checkSmarter: CheckSmarterJava) {
         var newCheckSmarter = Exchange().getParcelableCheckSmarter(checkSmarter)
@@ -40,7 +41,7 @@ class CheckSmarterView(context: Context?, attrs: AttributeSet?) : LinearLayout(c
         intent.putExtra(CHECK_SMARTER, newCheckSmarter)
         context.startActivity(intent)
 
-        Toast.makeText(context, "ID: ${checkSmarter.id}", Toast.LENGTH_SHORT).show()
+        MsgBox.show(context, "ID: ${checkSmarter.id}")
     }
 
     fun createNewCheckSmarter() {
@@ -49,7 +50,7 @@ class CheckSmarterView(context: Context?, attrs: AttributeSet?) : LinearLayout(c
     }
 
     override fun onCheckSmarterLongClick(checkSmarter: CheckSmarterJava) {
-        Toast.makeText(context, "LONG CLICK ID: ${checkSmarter.id}", Toast.LENGTH_SHORT).show()
+        MsgBox.show(context, "LONG CLICK ID: ${checkSmarter.id}")
     }
 
     override fun onFinishInflate() {
@@ -59,26 +60,8 @@ class CheckSmarterView(context: Context?, attrs: AttributeSet?) : LinearLayout(c
         checkSmarterView.adapter = checkSmarterAdapter
     }
 
-    /*private fun populateRealm() {
-        realm.createCheckSmarter(CheckSmarterJava(1, "Office CheckSmarter", true, true, 454, 231, createList(0, "Laptop")))
-        realm.createCheckSmarter(CheckSmarterJava(2, "Church CheckSmarter", false, false, 234, 643, createList(0, "Laptop")))
-        realm.createCheckSmarter(CheckSmarterJava(3, "Swimming CheckSmarter", false, true, 345, 234, createList(0, "Laptop")))
-    }
-
-    private fun createList(id: Int, title: String): RealmList<CheckSmarterTaskJava> {
-        val one = CheckSmarterTaskJava(id, "${title}", true)
-        val two = CheckSmarterTaskJava(id+1, "${title + 1}", false)
-        val three = CheckSmarterTaskJava(id+2, "${title + 2}", false)
-
-        return RealmList(one, two, three)
-    }*/
-
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-
-        realm = Realm.getDefaultInstance()
-
-        //populateRealm()
 
         val publishSubject: PublishSubject<CheckSmarterJava>
         publishSubject = PublishSubject.create()
@@ -91,17 +74,15 @@ class CheckSmarterView(context: Context?, attrs: AttributeSet?) : LinearLayout(c
         subscriptions.add(result
                 .subscribe(checkSmarterAdapter))
 
-        post { publishSubject.onNext(CheckSmarterJava(12)) }
+        post { publishSubject.onNext(CheckSmarterJava(0)) }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         subscriptions.unsubscribe()
-        realm.close()
     }
 
     private val checkSmarterSearch = Func1<CheckSmarterJava, Observable<RealmResults<CheckSmarterJava>>> { checkSmarter ->
-        realm.where(CheckSmarterJava::class.java).findAllAsync().asObservable()
-        //val result = realm.where(CheckSmarterJava::class.java).findAllAsync()
+        dbCollection.findAll(CheckSmarterJava::class.java)
     }
 }

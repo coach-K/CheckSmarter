@@ -18,8 +18,8 @@ public class CheckSmarterJava extends RealmObject {
     private int id = 0;
 
     private String title = "Quick Check Smarter";
-    private boolean check = true;
-    private boolean alarm = true;
+    private boolean check = false;
+    private boolean alarm = false;
     private long alarmValue = 345;
     private long timeValue = 456;
     private RealmList<CheckSmarterTaskJava> tasks = new RealmList<>();

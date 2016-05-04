@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.widget.RelativeLayout
 import com.andela.checksmarter.R
 import com.andela.checksmarter.model.CheckSmarterJava
+import com.andela.checksmarter.utilities.DateFormatter
 import kotlinx.android.synthetic.main.check_smarter_item_view.view.*
 import java.util.*
 
@@ -16,10 +17,11 @@ class CheckSmarterItemView(context: Context?, attrs: AttributeSet?) : RelativeLa
         checkTotal.text = checkSmarter.tasks.size.toString()
         checkTitle.text = checkSmarter.title
         checkTime.text = Date(checkSmarter.timeValue).time.toString()
+        checkTime.visibility = GONE
 
         if (checkSmarter.isAlarm) {
             checkAlarm.visibility = VISIBLE
-            checkAlarm.text = Date(checkSmarter.alarmValue).time.toString()
+            checkAlarm.text = DateFormatter.getReadableTime(checkSmarter.alarmValue)
         } else {
             checkAlarm.visibility = INVISIBLE
         }
