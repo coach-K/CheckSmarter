@@ -22,23 +22,33 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.andela.checksmarter.activities.CheckSmarterApplication;
+
 import java.util.Date;
+
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 public class OnBootReceiver extends BroadcastReceiver {
     private static final int PERIOD = 300000;   // 5 minutes
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(context, OnAlarmReceiver.class);
-        PendingIntent pi = PendingIntent.getBroadcast(context, 0,
-                i, 0);
+        String KEY = intent.getStringExtra(ReminderManager.KEY);
+        Reminder reminder = intent.getParcelableExtra(ReminderManager.VALUE);
 
-        mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + 60000,
-                PERIOD,
-                pi);
+        ReminderManager rm = new ReminderManager(context);
 
-        Log.i("Inside", "I'm awake! I'm awake! (yawn) - Date: " + new Date().toString());
+        switch (KEY) {
+            case ReminderManager.SET_REMINDER:
+                rm.setReminder(
+                        reminder.getIds(),
+                        reminder.getTimes());
+                Log.i("Inside", "I'm awake! I'm awake! (yawn) - Date: " + new Date().toString());
+                break;
+            case ReminderManager.CANCEL_REMINDER:
+                rm.cancelReminder(reminder.getRemoveId());
+                break;
+        }
     }
 }

@@ -28,6 +28,7 @@ public class AppService extends WakefulIntentService {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification notification = new NotificationBuilder().getNotification(context);
+        notification.tickerText = "hello";
         notificationManager.notify(0, notification);
     }
 }
