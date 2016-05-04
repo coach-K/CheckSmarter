@@ -15,9 +15,6 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sendBroadcast(Intent(this, OnBootReceiver::class.java))
-        Log.i("Splash Screen", "Initialize Alarm - Date: " + Date().toString())
-
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
 
