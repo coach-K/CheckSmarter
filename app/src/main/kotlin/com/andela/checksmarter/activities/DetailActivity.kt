@@ -43,9 +43,6 @@ import java.util.concurrent.TimeUnit
 class DetailActivity : AppCompatActivity() {
     private val dbCollection = DBCollection()
     private var currentCheckSmarter: CheckSmarterJava? = null
-    private var mSelectedDate: SelectedDate? = null
-    private var mHour: Int = 0
-    private var mMinute: Int = 0
     private var mRecurrenceOption: String = ""
     private var mRecurrenceRule: String = ""
 
@@ -157,20 +154,14 @@ class DetailActivity : AppCompatActivity() {
             }
 
             override fun onDateTimeRecurrenceSet(selectedDate: SelectedDate?, hourOfDay: Int, minute: Int, recurrenceOption: SublimeRecurrencePicker.RecurrenceOption?, recurrenceRule: String?) {
-                mSelectedDate = selectedDate
-                mHour = hourOfDay
-                mMinute = minute
-                mRecurrenceOption = if (recurrenceOption != null)
-                    recurrenceOption.name
-                else
-                    "n/a"
+                mRecurrenceOption = recurrenceOption?.name ?: "n/a"
                 mRecurrenceRule = recurrenceRule ?: "n/a"
 
-                mSelectedDate!!.startDate.set(Calendar.HOUR_OF_DAY, mHour)
-                mSelectedDate!!.startDate.set(Calendar.MINUTE, mMinute)
-                mSelectedDate!!.startDate.set(Calendar.SECOND, 0)
-                mSelectedDate!!.startDate.set(Calendar.MILLISECOND, 0)
-                var time = mSelectedDate!!.startDate.timeInMillis
+                selectedDate!!.startDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                selectedDate.startDate.set(Calendar.MINUTE, minute)
+                selectedDate.startDate.set(Calendar.SECOND, 0)
+                selectedDate.startDate.set(Calendar.MILLISECOND, 0)
+                var time = selectedDate.startDate.timeInMillis
 
                 setReminder(time)
                 return
