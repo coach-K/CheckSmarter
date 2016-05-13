@@ -45,9 +45,23 @@
                 android:resource="@xml/wakeup" />
         </receiver>
 
-        <receiver android:name=".utilities.alarm.OnAlarmReceiver"/>
+        <receiver android:name=".utilities.alarm.OnAlarmReceiver" />
 
-        <service android:name=".utilities.alarm.AppService"/>
+        <service android:name=".utilities.alarm.AppService" />
+
+        <receiver android:name=".utilities.widgets.CheckSmarterWidget">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget" />
+        </receiver>
+
+        <receiver android:name=".utilities.widgets.OnWidgetReceiver" />
+
     </application>
 
 </manifest>

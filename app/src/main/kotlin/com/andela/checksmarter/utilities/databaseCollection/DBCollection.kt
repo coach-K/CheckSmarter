@@ -58,6 +58,11 @@ class DBCollection {
         return realm.where(clazz).equalTo(key, value).findFirst()
     }
 
+    fun <M : RealmObject> findByChecked(clazz: Class<M>, key: String, value: Boolean): rx.Observable<RealmResults<M>> {
+        val realm = Realm.getDefaultInstance()
+        return realm.where(clazz).equalTo(key, value).findAllAsync().asObservable()
+    }
+
     fun <M : RealmObject> findAll(clazz: Class<M>): rx.Observable<RealmResults<M>> {
         val realm = Realm.getDefaultInstance()
         return realm.where(clazz).findAllAsync().asObservable()

@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.andela.checksmarter.Extensions.createCheckSmarter
 import com.andela.checksmarter.activities.DetailActivity
+import com.andela.checksmarter.activities.MainActivity
 import com.andela.checksmarter.adapters.CheckSmarterAdapter
 import com.andela.checksmarter.model.CheckSmarterJava
 import com.andela.checksmarter.model.CheckSmarterTaskJava
@@ -74,6 +75,15 @@ class CheckSmarterView(context: Context?, attrs: AttributeSet?) : LinearLayout(c
         subscriptions.add(result
                 .subscribe(checkSmarterAdapter))
 
+        var result2 = publishSubject
+                .flatMap(checkSmarterChecked)
+                .observeOn(AndroidSchedulers.mainThread())
+                .share()
+
+
+        subscriptions.add(result2
+                .subscribe(context as MainActivity))
+
         post { publishSubject.onNext(CheckSmarterJava(0)) }
     }
 
@@ -84,5 +94,9 @@ class CheckSmarterView(context: Context?, attrs: AttributeSet?) : LinearLayout(c
 
     private val checkSmarterSearch = Func1<CheckSmarterJava, Observable<RealmResults<CheckSmarterJava>>> { checkSmarter ->
         dbCollection.findAll(CheckSmarterJava::class.java)
+    }
+
+    private val checkSmarterChecked = Func1<CheckSmarterJava, Observable<RealmResults<CheckSmarterJava>>> { checkSmarter ->
+        dbCollection.findByChecked(CheckSmarterJava::class.java, "check", true)
     }
 }
